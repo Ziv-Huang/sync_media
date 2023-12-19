@@ -19,6 +19,7 @@ class Broadcaster():
     def broadcast(self, sync_handler: MediaSyncHandler):
         monitor = sync_handler.monitor_generator()
         for i in monitor:
+            # print(sync_handler.get_media_path()+": "+str(i))
             message = {
                 "action": "sync",
                 "id": sync_handler.get_media_path(),  # schedule_id or list_id
@@ -32,6 +33,7 @@ class Broadcaster():
 
     def pipeline(self):
         for sync_handler in self.sync_handlers:
+            print("sync_handler: ", sync_handler.get_media_path())
             threading.Thread(target=self.broadcast, args=(sync_handler,)).start()
 
     def heartbeat(self):
@@ -39,14 +41,13 @@ class Broadcaster():
             print("heartbeat")
             time.sleep(5*60)  # 5 minutes
 
-    def launch(self):
+    def register_function(self):
         self.master.register_function()
         self.heartbeat()
 
 
 if __name__ == "__main__":
     broadcaster = Broadcaster()
-    # broadcaster.add_player("assets/2.mp4")
     broadcaster.add_player("assets/synctest.mp4")
     broadcaster.pipeline()
-    broadcaster.launch()
+    broadcaster.register_function()

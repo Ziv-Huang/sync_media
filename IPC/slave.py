@@ -27,7 +27,6 @@ class Slave():
     def receive(self) -> tuple:
         try:
             message = self.ws.recv()
-            print(message)
             return json.loads(message), True
         except websockets.ConnectionClosed:
             return "ConnectionClosed", False
