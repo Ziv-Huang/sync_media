@@ -1,11 +1,11 @@
 import cv2
 import time
-import uuid
+from loguru import logger as log
 
 
 class MediaSyncHandler():
-    def __init__(self) -> None:
-        self.id = uuid.uuid4()
+    def __init__(self, id: str) -> None:
+        self.id = id
         self.cap = None
         self.fps = 0
         self.count = 0
@@ -21,10 +21,10 @@ class MediaSyncHandler():
         self.media_path = media_path
         self.cap = cv2.VideoCapture(media_path)
         if not self.cap.isOpened():
-            print("Load media failed, skip this media...")
+            log.warning("Load media failed, skip this media...")
             return False
         self.fps = self.cap.get(cv2.CAP_PROP_FPS)
-        print("Load media success")
+        log.info("Load media success")
         return True
 
     def render(self, idx: int, frame_name=None):
@@ -35,7 +35,7 @@ class MediaSyncHandler():
                 if idx == self.count:
                     ret, frame = self.cap.retrieve()
                 else:
-                    print("skip ", self.count)
+                    log.info("skip ", self.count)
                     continue
                 if ret:
                     cv2.imshow(frame_name, frame)
@@ -46,7 +46,7 @@ class MediaSyncHandler():
                 # else:
                 #     break
             else:
-                print("cap is closed, next video")
+                log.info("cap is closed, next video")
                 return False
 
     def monitor_generator(self) -> int:
@@ -62,7 +62,7 @@ class MediaSyncHandler():
             else:
                 break
             time.sleep(1/self.fps)
-        print("cap is closed")
+        log.info("cap is closed")
 
     def close(self):
         self.cap.release()
@@ -73,7 +73,7 @@ if __name__ == "__main__":
     mediasync = MediaSyncHandler()
     mediasync.load_media("assets/synctest.mp4")
     # for i in mediasync.monitor_generator():
-    #     print(i)
+    #     log.info(i)
     for i in range(1000):
         mediasync.render(i)
     mediasync.close()

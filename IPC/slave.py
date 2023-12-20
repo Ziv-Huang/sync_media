@@ -1,6 +1,7 @@
 import json
 import time
 import threading
+from loguru import logger as log
 
 import websockets
 from websockets.sync.client import connect
@@ -12,7 +13,7 @@ message format
     "action": "sync",
     "id": "schedule_id",
     "data": {
-        "mdeia":"xxx.mp4",
+        "media":"xxx.mp4",
         "current":frame_index,  // int
     }
 }
@@ -40,20 +41,20 @@ class Slave():
         #         message = websocket.recv()
         #         try:
         #             self.message = json.loads(message)
-        #             print(self.message)
+        #             log.info(self.message)
         #         except Exception as e:
-        #             print("json parse error: ", e)
+        #             log.info("json parse error: ", e)
         #             self.message = e
 
     def connection(self):
         while self.ws is None:
             try:
-                print("websocket connecting...")
+                log.info("websocket connecting...")
                 self.ws = connect("ws://localhost:8110")
             except Exception as e:
-                print("websocket connect error: ", e)
+                log.info("websocket connect error: ", e)
             time.sleep(3)
-        print("websocket connected")
+        log.info("websocket connected")
 
     def register_function(self):
         threading.Thread(target=self.connection).start()
@@ -63,6 +64,6 @@ if __name__ == "__main__":
     slave = Slave()
     while True:
         res, status = slave.receive()
-        print(res)
+        log.info(res)
         if not status:
             break
