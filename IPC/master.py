@@ -48,7 +48,7 @@ class Master():
             await asyncio.sleep(1)
 
     async def launch_server(self):
-        async with websockets.serve(self.entry, "localhost", 8110):
+        async with websockets.serve(self.entry, "0.0.0.0", 8110):
             # await self.loop_broadcast("Hello world!")
             print("localhost: {} server start".format(8110))
             await asyncio.Future()  # run forever

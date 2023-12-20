@@ -44,6 +44,6 @@ class Subscriber():
 
 if __name__ == "__main__":
     subscriber = Subscriber()
-    subscriber.player.load_media("assets/synctest.mp4")
+    # subscriber.player.load_media("assets/synctest.mp4")
     subscriber.register_function()
     subscriber.receive()

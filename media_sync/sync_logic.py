@@ -21,7 +21,7 @@ class MediaSyncHandler():
         self.media_path = media_path
         self.cap = cv2.VideoCapture(media_path)
         if not self.cap.isOpened():
-            print("Load media failed")
+            print("Load media failed, skip this media...")
             return False
         self.fps = self.cap.get(cv2.CAP_PROP_FPS)
         print("Load media success")
@@ -46,7 +46,7 @@ class MediaSyncHandler():
                 # else:
                 #     break
             else:
-                print("cap is closed")
+                print("cap is closed, next video")
                 return False
 
     def monitor_generator(self) -> int:
