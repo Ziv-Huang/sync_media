@@ -14,10 +14,10 @@ schedule_id = ["aaaaa", "bbbbb"]
 play_list = {
              schedule_id[0]: [
                 "assets/SnapSave.io-202230sec_-1080p.mp4",
-                "assets/2.mp4"],
+                "assets/synctest.mp4"],
              schedule_id[1]: [
-                "assets/2.mp4",
-                "assets/SnapSave.io-202230sec_-1080p.mp4"
+                "assets/video1.mp4",
+                "assets/video2.mp4"
                 ]
             }
 
