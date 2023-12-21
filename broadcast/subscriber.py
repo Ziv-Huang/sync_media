@@ -12,6 +12,7 @@ class Subscriber():
         self.slave = Slave()
         self.player = MediaSyncHandler(player_id)
         self.id = str(uuid.uuid4())
+        self.message = dict()
 
     def receive(self):
         while True:
@@ -30,18 +31,34 @@ class Subscriber():
             if status:
                 if message["id"] != self.player.get_id():
                     continue
-                self.render(message)
+                # self.render(message)
+                log.info(message)
+                self.message = message
             else:
                 log.warning("receive error: ", message)
                 time.sleep(1)
 
-    def render(self, message):
-        log.info(message)
-        frame_index = message["data"]["frame_index"]
-        if self.player.get_media_path() != message["data"]["media"]:
-            self.player.load_media(message["data"]["media"])
-            log.info("load media: ", message["data"]["media"])
-        self.player.render(frame_index, "sub_"+self.id)
+    def loop_render(self):
+        while True:
+            try:
+                if self.message is None:
+                    continue
+                # log.info(self.message)
+                frame_index = self.message["data"]["frame_index"]
+                if self.player.get_media_path() != self.message["data"]["media"]:
+                    self.player.load_media(self.message["data"]["media"])
+                    log.info("load media: ", self.message["data"]["media"])
+                self.player.render(frame_index, "sub_"+self.id)
+            except Exception:
+                continue
+
+    # def render(self, message):
+    #     log.info(message)
+    #     frame_index = message["data"]["frame_index"]
+    #     if self.player.get_media_path() != message["data"]["media"]:
+    #         self.player.load_media(message["data"]["media"])
+    #         log.info("load media: ", message["data"]["media"])
+    #     self.player.render(frame_index, "sub_"+self.id)
 
     def heartbeat(self):
         while True:
@@ -50,6 +67,7 @@ class Subscriber():
 
     def register_function(self, config=None):
         self.slave.register_function()
+        threading.Thread(target=self.loop_render).start()
         threading.Thread(target=self.heartbeat).start()
 
 

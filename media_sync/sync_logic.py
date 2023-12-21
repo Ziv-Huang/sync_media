@@ -18,6 +18,7 @@ class MediaSyncHandler():
         return self.media_path
 
     def load_media(self, media_path) -> bool:
+        self.count = 0
         self.media_path = media_path
         self.cap = cv2.VideoCapture(media_path)
         if not self.cap.isOpened():
@@ -32,14 +33,15 @@ class MediaSyncHandler():
             if self.cap.isOpened():
                 ret = self.cap.grab()
                 self.count += 1
-                if idx == self.count:
+                if idx < self.count:
                     ret, frame = self.cap.retrieve()
                 else:
-                    log.info("skip ", self.count)
+                    # log.info("skip: {}".format(self.count))
                     continue
                 if ret:
                     cv2.imshow(frame_name, frame)
                     cv2.waitKey(1)
+                time.sleep(1/self.fps)
                 return True
                 # if cv2.waitKey(1) & 0xFF == ord("q"):
                 #     break
@@ -54,7 +56,8 @@ class MediaSyncHandler():
             ret, frame = self.cap.read()
             # ret = self.cap.grab()
             if ret:
-                yield self.count
+                if self.count % int(self.fps) == 0:
+                    yield self.count
                 self.count += 1
                 # cv2.imshow(str(self.id), frame)
                 # if cv2.waitKey(1) & 0xFF == ord('q'):

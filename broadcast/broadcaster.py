@@ -24,18 +24,18 @@ class Broadcaster():
     def broadcast(self, sync_handler: MediaSyncHandler) -> bool:
         try:
             monitor = sync_handler.monitor_generator()
-            for i in monitor:
+            for res in monitor:
                 # log.info(sync_handler.get_media_path()+": "+str(i))
                 message = {
                     "action": "sync",
                     "id": sync_handler.get_id(),  # schedule_id or list_id
                     "data": {
                         "media": sync_handler.get_media_path(),
-                        "frame_index": i
+                        "frame_index": res
                     }
                 }
                 self.master.broadcast(json.dumps(message))
-                # log.info("{}: {}".format(sync_handler, i))
+                log.info("{}: {}".format(sync_handler, res))
         except Exception:
             return False
         return True
