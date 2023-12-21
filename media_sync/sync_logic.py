@@ -33,15 +33,18 @@ class MediaSyncHandler():
             if self.cap.isOpened():
                 ret = self.cap.grab()
                 self.count += 1
-                if idx < self.count:
-                    ret, frame = self.cap.retrieve()
-                else:
+                if idx - self.count > self.fps:
                     # log.info("skip: {}".format(self.count))
                     continue
+
+                ret, frame = self.cap.retrieve()
                 if ret:
                     cv2.imshow(frame_name, frame)
                     cv2.waitKey(1)
-                time.sleep(1/self.fps)
+                if idx < self.count:
+                    time.sleep(1/self.fps)
+                else:
+                    time.sleep(1/self.fps/3)
                 return True
                 # if cv2.waitKey(1) & 0xFF == ord("q"):
                 #     break
