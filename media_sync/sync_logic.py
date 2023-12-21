@@ -11,6 +11,7 @@ class MediaSyncHandler():
         self.count = 0
         self.media_path = None
         self.adjust_rate = 10
+        self.frame_name = None
 
     def get_id(self) -> str:
         return str(self.id)
@@ -29,7 +30,11 @@ class MediaSyncHandler():
         log.info("Load media success")
         return True
 
-    def render(self, idx: int, frame_name=None):
+    def render(self, idx: int, frame_name: str = None) -> bool:
+        if self.frame_name is None:
+            self.frame_name = frame_name
+            cv2.namedWindow(frame_name, cv2.WINDOW_NORMAL)
+            cv2.setWindowProperty(frame_name, cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
         while True:
             if self.cap.isOpened():
                 ret = self.cap.grab()
