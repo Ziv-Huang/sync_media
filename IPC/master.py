@@ -2,7 +2,7 @@ import asyncio
 import websockets
 import threading
 import time
-
+from loguru import logger as log
 
 '''
 message format
@@ -10,7 +10,7 @@ message format
     "action": "sync",
     "id": "schedule_id",
     "data": {
-        "mdeia":"xxx.mp4",
+        "media":"xxx.mp4",
         "frame_index":frame_index,  // int
     }
 }
@@ -35,7 +35,7 @@ class Master():
         try:
             self.register(websocket)
             async for message in websocket:
-                print(message)
+                log.info(message)
                 await websocket.send(message)
             await websocket.wait_closed()
         finally:
@@ -43,14 +43,14 @@ class Master():
 
     async def loop_broadcast(self, message):
         while True:
-            print(self.clients)
+            log.info(self.clients)
             websockets.broadcast(self.clients, message)
             await asyncio.sleep(1)
 
     async def launch_server(self):
         async with websockets.serve(self.entry, "0.0.0.0", 8110):
             # await self.loop_broadcast("Hello world!")
-            print("localhost: {} server start".format(8110))
+            log.info("localhost: {} server start".format(8110))
             await asyncio.Future()  # run forever
 
     def register_function(self):
