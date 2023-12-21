@@ -10,6 +10,7 @@ class MediaSyncHandler():
         self.fps = 0
         self.count = 0
         self.media_path = None
+        self.adjust_rate = 10
 
     def get_id(self) -> str:
         return str(self.id)
@@ -44,7 +45,7 @@ class MediaSyncHandler():
                 if idx < self.count:
                     time.sleep(1/self.fps)
                 else:
-                    time.sleep(1/self.fps/3)
+                    time.sleep(1/self.fps/self.adjust_rate)
                 return True
                 # if cv2.waitKey(1) & 0xFF == ord("q"):
                 #     break
@@ -59,7 +60,7 @@ class MediaSyncHandler():
             ret, frame = self.cap.read()
             # ret = self.cap.grab()
             if ret:
-                if self.count % int(self.fps) == 0:
+                if self.count % int(self.fps/self.adjust_rate) == 0:  # sync rate
                     yield self.count
                 self.count += 1
                 # cv2.imshow(str(self.id), frame)
