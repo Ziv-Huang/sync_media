@@ -13,11 +13,14 @@ schedule_id = ["aaaaa", "bbbbb"]
 
 play_list = {
              schedule_id[0]: [
-                "assets/SnapSave.io-202230sec_-1080p.mp4",
-                "assets/synctest.mp4"],
+                {"media": "assets/acer04.jpg", "sec": 10},
+                {"media": "assets/2.mp4", "sec": 0},
+                {"media": "assets/acer04.jpg", "sec": 5},
+                {"media": "assets/SnapSave.io-202230sec_-1080p.mp4", "sec": 0},
+                {"media": "assets/synctest.mp4", "sec": 0}],
              schedule_id[1]: [
-                "assets/video1.mp4",
-                "assets/video2.mp4"
+                    {"media": "assets/video1.mp4", "sec": 0},
+                    {"media": "assets/video2.mp4", "sec": 0}
                 ]
             }
 
