@@ -23,6 +23,7 @@ class Subscriber():
                 "id": "schedule_id",
                 "data": {
                     "media":"xxx.mp4",
+                    "sec":0, // int
                     "frame_index":frame_index,  // int
                 }
             }
@@ -32,7 +33,7 @@ class Subscriber():
                 if message["id"] != self.player.get_id():
                     continue
                 # self.render(message)
-                log.info(message)
+                log.debug(message)
                 self.message = message
             else:
                 log.warning("receive error: ", message)
@@ -46,8 +47,8 @@ class Subscriber():
                 # log.info(self.message)
                 frame_index = self.message["data"]["frame_index"]
                 if self.player.get_media_path() != self.message["data"]["media"]:
-                    self.player.load_media(self.message["data"]["media"])
-                    log.info("load media: ", self.message["data"]["media"])
+                    self.player.load_media(self.message["data"])
+                    log.info("load media: {}".format(self.message["data"]["media"]))
                 self.player.render(frame_index, "sub_"+self.id)
             except Exception:
                 continue
