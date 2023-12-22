@@ -1,0 +1,2 @@
+- broadcaster: `python sample.py -b`
+- subscriber: `python sample.py -s`
