@@ -36,7 +36,7 @@ class Subscriber():
                 log.debug(message)
                 self.message = message
             else:
-                log.warning("receive error: ", message)
+                log.warning("receive error: {}".format(message))
                 time.sleep(1)
 
     def loop_render(self):

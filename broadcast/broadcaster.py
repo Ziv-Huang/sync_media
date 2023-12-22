@@ -36,7 +36,7 @@ class Broadcaster():
                     }
                 }
                 self.master.broadcast(json.dumps(message))
-                log.debug("{}: {}".format(sync_handler, res))
+                log.debug("{}: {}".format(sync_handler, message))
         except Exception:
             return False
         return True
