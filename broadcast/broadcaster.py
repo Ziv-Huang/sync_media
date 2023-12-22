@@ -18,8 +18,8 @@ class Broadcaster():
             sync_handler = MediaSyncHandler(p)
             self.sync_handlers[p] = sync_handler
 
-    def player_load_media(self, player_idx, media_path):
-        self.sync_handlers[player_idx].load_media(media_path)
+    def player_load_media(self, player_idx, media):
+        self.sync_handlers[player_idx].load_media(media)
 
     def broadcast(self, sync_handler: MediaSyncHandler) -> bool:
         try:
@@ -31,11 +31,12 @@ class Broadcaster():
                     "id": sync_handler.get_id(),  # schedule_id or list_id
                     "data": {
                         "media": sync_handler.get_media_path(),
+                        "sec": sync_handler.get_media_sec(),
                         "frame_index": res
                     }
                 }
                 self.master.broadcast(json.dumps(message))
-                log.info("{}: {}".format(sync_handler, res))
+                log.debug("{}: {}".format(sync_handler, message))
         except Exception:
             return False
         return True
